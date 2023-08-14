@@ -33,7 +33,7 @@ namespace Mediapipe.Unity.Sample
   {
     public static ImageTransformationOptions GetTransformationOptions(this ImageSource imageSource, bool expectedToBeMirrored = false)
     {
-      var shouldFlipHorizontally = (imageSource.isFrontFacing || expectedToBeMirrored) ^ imageSource.isHorizontallyFlipped;
+      var shouldFlipHorizontally = expectedToBeMirrored ^ imageSource.isHorizontallyFlipped;
       var shouldFlipVertically = imageSource.isVerticallyFlipped;
       return ImageTransformationOptions.Build(shouldFlipHorizontally, shouldFlipVertically, imageSource.rotation);
     }

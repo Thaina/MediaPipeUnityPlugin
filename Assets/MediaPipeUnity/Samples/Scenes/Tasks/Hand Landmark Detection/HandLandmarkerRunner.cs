@@ -58,9 +58,9 @@ namespace Mediapipe.Unity.Sample.HandLandmarkDetection
       // NOTE: The screen will be resized later, keeping the aspect ratio.
       screen.Initialize(imageSource);
 
-      SetupAnnotationController(_handLandmarkerResultAnnotationController, imageSource);
+      SetupAnnotationController(_handLandmarkerResultAnnotationController, imageSource, true);
 
-      var transformationOptions = imageSource.GetTransformationOptions();
+      var transformationOptions = imageSource.GetTransformationOptions(true);
       var flipHorizontally = transformationOptions.flipHorizontally;
       var flipVertically = transformationOptions.flipVertically;
       var imageProcessingOptions = new Tasks.Vision.Core.ImageProcessingOptions(rotationDegrees: (int)transformationOptions.rotationAngle);
