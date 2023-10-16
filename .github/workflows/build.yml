@@ -1,0 +1,43 @@
+name: build-aar-test
+on:
+  push: {}
+
+jobs:
+  android-build:
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install NumPy
+        run: pip install --no-cache-dir --user numpy
+
+      - name: echo
+        run: |
+          echo $ANDROID_HOME
+          echo $ANDROID_NDK_HOME
+
+      - uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r21e
+          add-to-path: false
+
+      - name: Build
+        run: |
+          # make a dummy OpenCV dir
+          mkdir -p /usr/local/opt/opencv@3
+
+          make android_arm64
+          make install
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+
+      - name: Upload mediapipe_android.aar
+        uses: actions/upload-artifact@v3
+        with:
+          name: mediapipe_android.aar
+          path: Assets/MediaPipe/SDK/Plugins/Android/mediapipe_android.aar
