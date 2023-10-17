@@ -41,3 +41,45 @@ jobs:
         with:
           name: mediapipe_android.aar
           path: Assets/MediaPipe/SDK/Plugins/Android/mediapipe_android.aar
+
+  windows-build:
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v4
+
+      # Setup build tools
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: git patch unzip zip
+
+      # Setup Python
+      - uses: actions/setup-python@v4
+        id: setup-python
+        with:
+          python-version: '3.10'
+
+      - name: echo
+        run: |
+          echo ${{ steps.setup-python.outputs.python-path }}
+
+      - name: Install NumPy
+        run: pip install --no-cache-dir --user numpy
+
+      - name: Install OpenCV
+        run: |
+          curl -L --retry 4 --connect-timeout 10 https://github.com/opencv/opencv/releases/download/3.4.10/opencv-3.4.10-vc14_vc15.exe -o opencv-installer.exe
+          start /wait opencv-installer.exe -gm2 -y -oC:\
+          del opencv-installer.exe
+        shell: cmd
+
+      - name: Build
+        run: |
+          set ANDROID_NDK_HOME=
+
+          make cpu
+          make install
+        env:
+          PYTHON_BIN_PATH: C://hostedtoolcache//windows//Python//3.10.11//x64//python.exe
+        shell: cmd
