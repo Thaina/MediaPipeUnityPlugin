@@ -6,7 +6,7 @@
 
 namespace Mediapipe.Tasks.Core
 {
-  internal interface ITaskOptions
+  public interface ITaskOptions
   {
     CalculatorOptions ToCalculatorOptions() => null;
 
